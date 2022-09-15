@@ -50,7 +50,7 @@ public class TileGeneration : MonoBehaviour
                 else
                 {
                     earthTm.SetTile(new Vector3Int(x, y, 0), ts.TILE_WATER);
-                    mtm.SetMapTile(x, y, TileSettings.TILE_GROUND, 0f, false);
+                    mtm.SetMapTile(x, y, TileSettings.TILE_OCEAN, 0f, false);
                     mtm.passingGrid[x, y] = 0;
                 }
             }
@@ -77,6 +77,19 @@ public class TileGeneration : MonoBehaviour
                     mtm.SetMapTile(x, y, TileSettings.TILE_MOUNTAIN, 0, false);
                     mtm.passingGrid[x, y] = 0;
                     continue;
+                }
+
+                if (noiseMap[x, y] > TileSettings.LEWEL_FIELD && noiseMap[x, y] < TileSettings.LEWEL_FOREST
+                    && mtm.CheckAvalaibility(x, y))
+                {
+                    earthTm.SetTile(new Vector3Int(x, y, 0), ts.TILE_FIELD);
+                    mtm.SetMapTile(x, y, TileSettings.TILE_FIELD, TileSettings.SPEED_FIELD, true);
+                }
+                else if (noiseMap[x, y] > TileSettings.LEWEL_FOREST && noiseMap[x, y] < TileSettings.LEWEL_MOUNTAIN
+                    && mtm.CheckAvalaibility(x, y))
+                {
+                    earthTm.SetTile(new Vector3Int(x, y, 0), ts.TILE_FOREST);
+                    mtm.SetMapTile(x, y, TileSettings.TILE_FOREST, TileSettings.SPEED_FOREST, true);
                 }
             }
         }
