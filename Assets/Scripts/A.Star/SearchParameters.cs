@@ -3,34 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using UnityEngine;
 
-public class Node : IEquatable<Node>
+public class SearchParameters : MonoBehaviour 
 {
-    public Point position;
-    public int g = 0, h = 0;
-    public int f { get { return g + h; } }
+    private Node startLocation, endLocation;
+    private int[,] grid;
+    private int size;
+    public MapTileManager mtm;
 
-    public Node previous;
-
-    public Node(Point p) => position = p;
-
-    public bool Equals(Node n)
+    public void ChangePath(Vector2Int start, Vector2Int end)
     {
-        return position.X == n.position.X && position.Y == n.position.Y;
+        startLocation = new Node(start);
+        endLocation = new Node(end);
     }
-}
-
-public class SearchParameters
-{
-    public Node startLocation { get; set; }
-    public Node endLocation { get; set; }
-    public int[,] grid { get; set; }
-    public int size { get; set; }
-
-    public List<Node> aStar()
+    public void SetGrid(int[,] grid) 
+    { 
+        this.grid = grid;
+        size = grid.GetLength(1);
+    }
+    public ResultPath aStar()
     {
         List<Node> openList = new List<Node> { };
         List<Node> closedList = new List<Node> { };
+
 
         Node currentNode;
 
@@ -50,12 +46,12 @@ public class SearchParameters
 
             foreach (Node node in GetNeighbourNodes(currentNode))
             {
-                if (grid[node.position.X, node.position.Y] == 0 || closedList.Contains(node))
+                if (grid[node.position.x, node.position.y] == 0 || closedList.Contains(node))
                 {
                     continue;
                 }
 
-                node.g = GetMathDistance(startLocation, node);
+                node.g = GetMathDistance(startLocation, node) + (int)mtm.mapTiles[node.position.x, node.position.y].speed;
                 node.h = GetMathDistance(endLocation, node);
 
                 node.previous = currentNode;
@@ -67,102 +63,54 @@ public class SearchParameters
             }
         }
 
-        return new List<Node> { };
+        return new ResultPath();
     }
-
-    private List<Node> GetFinishList(Node startLocation, Node endLocation)
+    private ResultPath GetFinishList(Node startLocation, Node endLocation)
     {
-        List<Node> finishedList = new List<Node> { };
+        ResultPath resultPath = new ResultPath();
         Node currentNode = endLocation;
 
+        // !! Calculate time
         while (currentNode != startLocation)
         {
-            finishedList.Add(currentNode);
+           resultPath.Add(currentNode.position);
             currentNode = currentNode.previous;
         }
 
-        finishedList.Reverse();
-
-        return finishedList;
+        resultPath.Reverse();
+        return resultPath;
     }
 
     private int GetMathDistance(Node start, Node node)
     {
-        return Math.Abs(start.position.X - node.position.X) + Math.Abs(start.position.Y - node.position.Y);
+        return Math.Abs(start.position.x - node.position.x) + Math.Abs(start.position.y - node.position.y);
     }
 
     private List<Node> GetNeighbourNodes(Node currentNode)
     {
         List<Node> neighbourNodes = new List<Node> { };
-        int x = currentNode.position.X, y = currentNode.position.Y;
+        int x = currentNode.position.x, y = currentNode.position.y;
 
-        if (x + 1 < size)
+        if (x + 1 < grid.GetLength(0))
         {
-            neighbourNodes.Add(new Node(new Point(x + 1, y)));
+            neighbourNodes.Add(new Node(new Vector2Int(x + 1, y)));
         }
 
         if (x - 1 >= 0)
         {
-            neighbourNodes.Add(new Node(new Point(x - 1, y)));
+            neighbourNodes.Add(new Node(new Vector2Int(x - 1, y)));
         }
 
         if (y + 1 < size)
         {
-            neighbourNodes.Add(new Node(new Point(x, y + 1)));
+            neighbourNodes.Add(new Node(new Vector2Int(x, y + 1)));
         }
 
         if (y - 1 >= 0)
         {
-            neighbourNodes.Add(new Node(new Point(x, y - 1)));
+            neighbourNodes.Add(new Node(new Vector2Int(x, y - 1)));
         }
 
         return neighbourNodes;
-    }
-
-    public bool checkAvalaibility(int x, int y)
-    {
-        bool avalaibility = true;
-
-        if (x + 1 < size)
-        {
-            if (grid[x + 1, y] == 0) return false;
-        }
-
-        if (x - 1 >= 0)
-        {
-            if (grid[x - 1, y] == 0) return false;
-        }
-
-        if (y + 1 < size)
-        {
-            if (grid[x, y + 1] == 0) return false;
-        }
-
-        if (y - 1 >= 0)
-        {
-            if (grid[x, y - 1] == 0) return false;
-        }
-
-        if (x + 1 < size && y + 1 < size) 
-        {
-            if (grid[x + 1, y + 1] == 0) return false;
-        }
-
-        if (x + 1 < size && y - 1 < size)
-        {
-            if (grid[x + 1, y - 1] == 0) return false;
-        }
-
-        if (x - 1 < size && y + 1 < size)
-        {
-            if (grid[x - 1, y + 1] == 0) return false;
-        }
-
-        if (x - 1 < size && y - 1 < size)
-        {
-            if (grid[x - 1, y - 1] == 0) return false;
-        }
-
-        return avalaibility;
     }
 }

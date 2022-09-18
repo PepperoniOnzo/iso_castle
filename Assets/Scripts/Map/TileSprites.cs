@@ -6,9 +6,17 @@ using UnityEngine.Tilemaps;
 public class TileSprites : MonoBehaviour
 {
     //Rule tiles
+    [Header("Rule tiles")]
     public RuleTile TILE_GROUND;
     public RuleTile TILE_MOUNTAIN;
 
     //Tiles
-    public Tile TILE_WATER;
+    [Header("Tiles land")]
+    public Tile TILE_WATER; 
+    public Tile TILE_FIELD;
+    public Tile TILE_FOREST;
+
+    [Header("Tiles structures")]
+    public Tile TILE_TOWN;
+    public Tile TILE_ROAD;
 }

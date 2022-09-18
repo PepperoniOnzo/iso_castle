@@ -8,13 +8,14 @@ public class GridManager : MonoBehaviour
     public GameObject tileGenerator;
     TileGeneration tg;
 
-    public int size;
+    public bool fallofOn = true;
+    public int sizeGrid = 32, cityCount = 2;
     void Start()
     {
         grid = gameObject.GetComponent<Grid>();
 
         tg = tileGenerator.GetComponent<TileGeneration>();
-        tg.Initialize(size, true);
+        tg.Initialize(sizeGrid, fallofOn, cityCount);
 
         tg.GenerateGroundLayer().transform.SetParent(grid.gameObject.transform);
         
