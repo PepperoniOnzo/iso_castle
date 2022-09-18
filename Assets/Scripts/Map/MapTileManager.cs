@@ -6,6 +6,8 @@ public class MapTileManager : MonoBehaviour
 {
     public MapTile[,] mapTiles { get; set; }
     public int[,] passingGrid { get; set; }
+
+    public List<Vector2Int> avalaibleGrids = new List<Vector2Int>();
     public int mapSize { get; set; }
     public bool fallofOn { get; set; }
 

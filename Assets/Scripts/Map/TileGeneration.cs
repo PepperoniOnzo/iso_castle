@@ -8,6 +8,7 @@ public class TileGeneration : MonoBehaviour
     public GameObject mapTileManager;
     public TileSprites ts;
     MapTileManager mtm;
+    SearchParameters searchParameters  = new SearchParameters();
 
     private float[,] noiseMap;
 
@@ -67,6 +68,7 @@ public class TileGeneration : MonoBehaviour
         earthTm.tileAnchor = new Vector3(0.5f, 0.5f, 0);
         earthTr.sortingLayerName = "Main";
 
+        //Land generatoion
         for (int x = 0; x < mtm.mapSize; x++)
         {
             for (int y = 0; y < mtm.mapSize; y++)
@@ -76,6 +78,7 @@ public class TileGeneration : MonoBehaviour
                     earthTm.SetTile(new Vector3Int(x, y, 0), ts.TILE_MOUNTAIN);
                     mtm.SetMapTile(x, y, TileSettings.TILE_MOUNTAIN, 0, false);
                     mtm.passingGrid[x, y] = 0;
+                    mtm.avalaibleGrids.Add(new Vector2Int(x, y));
                     continue;
                 }
 
@@ -84,15 +87,19 @@ public class TileGeneration : MonoBehaviour
                 {
                     earthTm.SetTile(new Vector3Int(x, y, 0), ts.TILE_FIELD);
                     mtm.SetMapTile(x, y, TileSettings.TILE_FIELD, TileSettings.SPEED_FIELD, true);
+                    mtm.avalaibleGrids.Add(new Vector2Int(x, y));
                 }
                 else if (noiseMap[x, y] > TileSettings.LEWEL_FOREST && noiseMap[x, y] < TileSettings.LEWEL_MOUNTAIN
                     && mtm.CheckAvalaibility(x, y))
                 {
                     earthTm.SetTile(new Vector3Int(x, y, 0), ts.TILE_FOREST);
                     mtm.SetMapTile(x, y, TileSettings.TILE_FOREST, TileSettings.SPEED_FOREST, true);
+                    mtm.avalaibleGrids.Add(new Vector2Int(x, y));
                 }
             }
         }
+
+
 
         return earthObject;
     }

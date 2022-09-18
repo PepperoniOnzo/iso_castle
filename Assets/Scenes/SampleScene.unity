@@ -910,6 +910,8 @@ MonoBehaviour:
   TILE_GROUND: {fileID: 11400000, guid: 8fa0a6b4ccb4ed64597609c76fdb79d4, type: 2}
   TILE_MOUNTAIN: {fileID: 11400000, guid: fe0a1275c24d24f468263618aaed60aa, type: 2}
   TILE_WATER: {fileID: 11400000, guid: 7ddff41f0d14e1e479fa2dbe6731eb6a, type: 2}
+  TILE_FIELD: {fileID: 11400000, guid: 5fb191d1f720562438665cf8ccc719ab, type: 2}
+  TILE_FOREST: {fileID: 11400000, guid: 54638292fbb546a43972c34121c439ab, type: 2}
 --- !u!1 &2077841275
 GameObject:
   m_ObjectHideFlags: 0
