@@ -5,16 +5,17 @@ using System.Drawing;
 using System.Linq;
 using UnityEngine;
 
-public class SearchParameters
+public class SearchParameters : MonoBehaviour 
 {
     private Node startLocation, endLocation;
     private int[,] grid;
     private int size;
+    public MapTileManager mtm;
 
-    public void ChangePath(int xS, int yS, int xE, int yE)
+    public void ChangePath(Vector2Int start, Vector2Int end)
     {
-        startLocation = new Node(new Vector2Int(xS, yS));
-        endLocation = new Node(new Vector2Int(xE, yE));
+        startLocation = new Node(start);
+        endLocation = new Node(end);
     }
     public void SetGrid(int[,] grid) 
     { 
@@ -49,7 +50,7 @@ public class SearchParameters
                     continue;
                 }
 
-                node.g = GetMathDistance(startLocation, node);
+                node.g = GetMathDistance(startLocation, node) + (int)mtm.mapTiles[node.position.x, node.position.y].speed;
                 node.h = GetMathDistance(endLocation, node);
 
                 node.previous = currentNode;

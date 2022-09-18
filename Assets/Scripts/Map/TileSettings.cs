@@ -8,11 +8,15 @@ public static class TileSettings
     public static string TILE_GROUND = "Ground";
     public static string TILE_FIELD = "Field";
     public static string TILE_FOREST = "Forest";
+    public static string TILE_TOWN = "Town";
+    public static string TILE_ROAD = "Road";
 
     //Speed
     public static float SPEED_GROUND = 10f;
     public static float SPEED_FIELD = 15f;
     public static float SPEED_FOREST = 20f;
+    public static float SPEED_TOWN = 10f;
+    public static float SPEED_ROAD = 5f;
 
     //Layers names
     public static string LAYER_GROUND = "Ground";

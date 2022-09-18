@@ -8,7 +8,7 @@ public class TileGeneration : MonoBehaviour
     public GameObject mapTileManager;
     public TileSprites ts;
     MapTileManager mtm;
-    SearchParameters searchParameters  = new SearchParameters();
+    public SearchParameters searchParameters;
 
     private float[,] noiseMap;
 
@@ -17,14 +17,16 @@ public class TileGeneration : MonoBehaviour
         mtm = mapTileManager.GetComponent<MapTileManager>();
     }
 
-    public void Initialize(int size, bool falloff)
+    public void Initialize(int size, bool falloff, int cityCount)
     {
+        //Map tile manager
         mtm.mapSize = size;
-
         mtm.passingGrid = new int[size, size];
         mtm.mapTiles = new MapTile[size, size];
-
         mtm.fallofOn = falloff;
+        mtm.cityInfo.SetSityCount(cityCount);
+
+        //Additional
         noiseMap = GenerateNoiseMap();
     }
 
@@ -57,6 +59,7 @@ public class TileGeneration : MonoBehaviour
             }
         }
 
+        searchParameters.SetGrid(mtm.passingGrid);
         return earthObject;
     }
 
@@ -99,7 +102,49 @@ public class TileGeneration : MonoBehaviour
             }
         }
 
+        //City and road generations
+        if (mtm.cityInfo.cityCount != 0 && mtm.avalaibleGrids.Count != 0) 
+        {
+            int count = 1, attempts = 10 * mtm.cityInfo.cityCount, avalaibleGrids = mtm.avalaibleGrids.Count;
+            mtm.cityInfo.cityPos.Add(mtm.avalaibleGrids[Random.Range(0, avalaibleGrids)]);
+            Vector2Int startPos = mtm.cityInfo.cityPos[0], nextPos;
 
+            earthTm.SetTile(new Vector3Int(startPos.x, startPos.y, 0), ts.TILE_TOWN);
+            mtm.SetMapTile(startPos.x, startPos.y, TileSettings.TILE_TOWN, TileSettings.SPEED_TOWN, true);
+            mtm.avalaibleGrids.Remove(startPos);
+
+            do
+            {
+                nextPos = mtm.avalaibleGrids[Random.Range(0, mtm.avalaibleGrids.Count)];
+                searchParameters.ChangePath(startPos, nextPos);
+                ResultPath resultPath = searchParameters.aStar();
+                if (resultPath.path.Count != 0)
+                {
+                    earthTm.SetTile(new Vector3Int(nextPos.x, nextPos.y, 0), ts.TILE_TOWN);
+                    mtm.SetMapTile(nextPos.x, nextPos.y, TileSettings.TILE_TOWN, TileSettings.SPEED_TOWN, true);
+                    mtm.avalaibleGrids.Remove(nextPos);
+
+                    startPos = mtm.cityInfo.cityPos[Random.Range(0, mtm.cityInfo.cityPos.Count)];
+
+                    List<Vector2Int> path = resultPath.path;
+                    for (int i = 0; i < path.Count - 1; i++)
+                    {
+                        if (mtm.mapTiles[path[i].x, path[i].y].tileId != TileSettings.TILE_TOWN)
+                        {
+                            earthTm.SetTile(new Vector3Int(path[i].x, path[i].y, 0), ts.TILE_ROAD);
+                            mtm.SetMapTile(path[i].x, path[i].y, TileSettings.TILE_ROAD, TileSettings.SPEED_ROAD, true);
+                        }
+                    }
+
+                    count++;
+                }
+                else
+                {
+                    attempts--;
+                }
+            } while (count < mtm.cityInfo.cityCount || attempts == 0);
+        }
+        
 
         return earthObject;
     }
