@@ -27,6 +27,7 @@ public class SearchParameters : MonoBehaviour
         List<Node> openList = new List<Node> { };
         List<Node> closedList = new List<Node> { };
 
+
         Node currentNode;
 
         openList.Add(startLocation);
