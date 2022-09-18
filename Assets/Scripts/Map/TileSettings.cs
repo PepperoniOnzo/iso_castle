@@ -12,11 +12,11 @@ public static class TileSettings
     public static string TILE_ROAD = "Road";
 
     //Speed
-    public static float SPEED_GROUND = 10f;
-    public static float SPEED_FIELD = 15f;
-    public static float SPEED_FOREST = 20f;
-    public static float SPEED_TOWN = 10f;
-    public static float SPEED_ROAD = 5f;
+    public static float SPEED_GROUND = 1.0f;
+    public static float SPEED_FIELD = 1.2f;
+    public static float SPEED_FOREST = 1.5f;
+    public static float SPEED_TOWN = 1.0f;
+    public static float SPEED_ROAD = .5f;
 
     //Layers names
     public static string LAYER_GROUND = "Ground";
@@ -31,4 +31,7 @@ public static class TileSettings
     //Generation scales
     public static float SCALE_NOISE = 0.2f;
     public static float SCALE_FALLOFF = 2f;
+
+    //Another settings
+    public static int ANOTHER_TOWN_RADIUS = 3;
 }

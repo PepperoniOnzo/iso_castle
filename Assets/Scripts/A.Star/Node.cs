@@ -4,8 +4,8 @@ using UnityEngine;
 public class Node : IEquatable<Node>
 {
     public Vector2Int position;
-    public int g = 0, h = 0;
-    public int f { get { return g + h; } }
+    public float g = 0, h = 0;
+    public float f { get { return g + h; } }
 
     public Node previous;
 
