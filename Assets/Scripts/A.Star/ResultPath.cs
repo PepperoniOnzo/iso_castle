@@ -7,5 +7,5 @@ public class ResultPath
     public int estimateTime = 0;
 
     public void Add(Vector2Int pos) => path.Add(pos);
-    public void Reverse() => path.Reverse();
+    public void Reverse() { path.Reverse(); }
 }

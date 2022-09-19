@@ -43,17 +43,17 @@ public class MapTileManager : MonoBehaviour
             if (mapTiles[x + 1, y + 1].tileId == TileSettings.TILE_OCEAN) return false;
         }
 
-        if (x + 1 < mapSize && y - 1 < mapSize)
+        if (x + 1 < mapSize && y - 1 >= 0)
         {
             if (mapTiles[x + 1, y - 1].tileId == TileSettings.TILE_OCEAN) return false;
         }
 
-        if (x - 1 < mapSize && y + 1 < mapSize)
+        if (x - 1 >= 0 && y + 1 < mapSize)
         {
             if (mapTiles[x - 1, y + 1].tileId == TileSettings.TILE_OCEAN) return false;
         }
 
-        if (x - 1 < mapSize && y - 1 < mapSize)
+        if (x - 1 >= 0 && y - 1 >= 0) 
         {
             if (mapTiles[x - 1, y - 1].tileId == TileSettings.TILE_OCEAN) return false;
         }
