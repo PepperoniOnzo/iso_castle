@@ -44,7 +44,8 @@ public class SearchParameters : MonoBehaviour
                     }
                 }
             }
-            return CheckRFSTRecursive(op, closedList, iteration++, radius, tileId);
+            iteration++;
+            return CheckRFSTRecursive(op, closedList, iteration, radius, tileId);
         }
         return false;
     }

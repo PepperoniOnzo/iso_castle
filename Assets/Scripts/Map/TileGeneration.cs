@@ -81,7 +81,6 @@ public class TileGeneration : MonoBehaviour
                     earthTm.SetTile(new Vector3Int(x, y, 0), ts.TILE_MOUNTAIN);
                     mtm.SetMapTile(x, y, TileSettings.TILE_MOUNTAIN, 0, false);
                     mtm.passingGrid[x, y] = 0;
-                    mtm.avalaibleGrids.Add(new Vector2Int(x, y));
                     continue;
                 }
 
@@ -118,8 +117,8 @@ public class TileGeneration : MonoBehaviour
                 nextPos = mtm.avalaibleGrids[Random.Range(0, mtm.avalaibleGrids.Count)];
                 searchParameters.ChangePath(nextPos, startPos);
                 ResultPath resultPath = searchParameters.aStar();
-                if (resultPath.path.Count != 0 )
-                    //&& searchParameters.CheckRFST(nextPos, TileSettings.ANOTHER_TOWN_RADIUS, TileSettings.TILE_TOWN))
+                if (resultPath.path.Count != 0 
+                    && !searchParameters.CheckRFST(nextPos, TileSettings.ANOTHER_TOWN_RADIUS, TileSettings.TILE_TOWN))
                 {
                     earthTm.SetTile(new Vector3Int(nextPos.x, nextPos.y, 0), ts.TILE_TOWN);
                     mtm.SetMapTile(nextPos.x, nextPos.y, TileSettings.TILE_TOWN, TileSettings.SPEED_TOWN, true);
